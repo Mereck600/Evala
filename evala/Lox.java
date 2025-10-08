@@ -1,4 +1,4 @@
-package Evala.evala;
+package lox;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,12 +8,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Evala {
+public class Lox {
     static boolean hadError = false;
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
-            System.out.println("Usage: Evala [script]");
+            System.out.println("Usage: jlox [script]");
             System.exit(64);
         } else if (args.length == 1) {
             runFile(args[0]);
@@ -31,7 +31,7 @@ public class Evala {
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
-        System.out.println("Welcome to Evala!");
+        System.out.println("Welcome to jlox!");
 
         for (;;) {
             System.out.print("> ");

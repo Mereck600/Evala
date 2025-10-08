@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static Evala.evala.TokenType.*;
-
+ 
 public class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
@@ -33,7 +32,6 @@ public class Scanner {
         keywords.put("true", TRUE);
         keywords.put("var", VAR);
         keywords.put("while", WHILE);
-        keywords.put("break", BREAK);
     }
 
     Scanner(String source) {
@@ -88,7 +86,7 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Evala.error(line, "Unexpected character.");
+                    Lox.error(line, "Unexpected character.");
                 }
             }
         }
@@ -125,7 +123,7 @@ public class Scanner {
         }
 
         if (isAtEnd()) {
-            Evala.error(line, "Unterminated string.");
+            Lox.error(line, "Unterminated string.");
             return;
         }
 
