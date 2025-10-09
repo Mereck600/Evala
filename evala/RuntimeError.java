@@ -1,4 +1,4 @@
-package Evala.evala;
+package evala;
 
 class RuntimeError extends RuntimeException {
   final Token token;

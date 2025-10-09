@@ -1,4 +1,4 @@
-package Evala.evala;
+package evala;
 
 public class Token {
     final TokenType type;

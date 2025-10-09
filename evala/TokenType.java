@@ -1,4 +1,4 @@
-package Evala.evala;
+package evala;
 
 enum TokenType {
     // Single-character tokens.
