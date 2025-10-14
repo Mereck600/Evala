@@ -54,7 +54,7 @@ public class Evala {
         // Stop if there was a syntax error.
         if (hadError) return;
     
-        System.out.println(new AstPrinter().print(expression));
+        System.out.println(expression);
     }
 
     static void error(int line, String message) {
