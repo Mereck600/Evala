@@ -1,10 +1,10 @@
 package evala;
 
+import static evala.TokenType.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static evala.TokenType.*;
  
 public class Scanner {
     private final String source;
@@ -86,7 +86,7 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Lox.error(line, "Unexpected character.");
+                    Evala.error(line, "Unexpected character.");
                 }
             }
         }
@@ -123,7 +123,7 @@ public class Scanner {
         }
 
         if (isAtEnd()) {
-            Lox.error(line, "Unterminated string.");
+            Evala.error(line, "Unterminated string.");
             return;
         }
 
