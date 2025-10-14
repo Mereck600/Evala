@@ -1,13 +1,5 @@
 package evala;
 
-import evala.Expr.Assign;
-import evala.Expr.Call;
-import evala.Expr.Comma;
-//import evala.Expr.Conditional;
-import evala.Expr.Logical;
-import evala.Expr.Ternary;
-import evala.Expr.Variable;
-
 class AstPrinter implements Expr.Visitor<String> {
     String print(Expr expr) {
         return expr.accept(this);
@@ -57,69 +49,27 @@ class AstPrinter implements Expr.Visitor<String> {
             new Token(TokenType.STAR, "*", null, 1),
             new Expr.Grouping(
                 new Expr.Literal(45.67)));
-        //Should be 1-(2*-3)<4 ==false
-        Expr expr2 = new Expr.Binary(new Expr.Binary(new Expr.Binary(new Expr.Literal(1), 
-                                                                new Token(TokenType.MINUS, "-", null, 1),
-                                                                new Expr.Binary(new Expr.Literal(2),
-                                                                                new Token(TokenType.STAR, "*", null, 1),
-                                                                                new Expr.Unary(new Token(TokenType.MINUS, "-", null, 1),
-                                                                                               new Expr.Literal(3)))), 
-                                                    new Token(TokenType.LESS, "<", null, 1), 
-                                                    new Expr.Literal(4)), 
-                                    new Token(TokenType.EQUAL_EQUAL, "==", null, 1),
-                                    new Expr.Literal(false));     
-        
+
     
 
+        Expr expression2 = new Expr.Binary(new Expr.Binary(new Expr.Binary(new Expr.Literal(1), 
+        new Token(TokenType.MINUS, "-", null, 1),
+        new Expr.Binary(new Expr.Literal(2),
+                        new Token(TokenType.STAR, "*", null, 1),
+                        new Expr.Unary(new Token(TokenType.MINUS, "-", null, 1),
+                                       new Expr.Literal(3)))), 
+new Token(TokenType.LESS, "<", null, 1), 
+new Expr.Literal(4)), 
+new Token(TokenType.EQUAL_EQUAL, "==", null, 1),
+new Expr.Literal(false));   
+       
+          
+               
+            
         System.out.println(new AstPrinter().print(expression));
-        System.out.println(new AstPrinter().print(expr2));
+        System.out.println(new AstPrinter().print(expression2));
     }
 
-    @Override
-    public String visitCommaExpr(Comma expr) {
-        // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'visitCommaExpr'");
-        return parenthesize("comma",expr.left,expr.right);
-    }
+// 1 - (2 * -3) < 4 == false
 
-    @Override
-    public String visitAssignExpr(Assign expr) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'visitAssignExpr'");
-        return parenthesize("= " + expr.name.lexeme, expr.value);
-
-    }
-
-    @Override
-    public String visitVariableExpr(Variable expr) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'visitVariableExpr'");
-        return expr.name.lexeme;
-    }
-
-    // @Override
-    // public String visitConditionalExpr(Conditional expr) {
-    //     // TODO Auto-generated method stub
-    //     //throw new UnsupportedOperationException("Unimplemented method 'visitConditionalExpr'");
-    //      return parenthesize("?:", expr.condition, expr.thenBranch, expr.elseBranch);
-
-    //     }
-
-    @Override
-    public String visitCallExpr(Call expr) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitCallExpr'");
-    }
-
-    @Override
-    public String visitLogicalExpr(Logical expr) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitLogicalExpr'");
-    }
-
-    @Override
-    public String visitTernaryExpr(Ternary expr) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitTernaryExpr'");
-    }
 }
