@@ -1,11 +1,11 @@
-package Evala.evala;
+package evala;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static Evala.evala.TokenType.*;
+import static evala.TokenType.*;
 
 public class Scanner {
     private final String source;
