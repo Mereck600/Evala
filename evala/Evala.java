@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 public class Evala {
@@ -13,17 +14,45 @@ public class Evala {
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
 
-    public static void main(String[] args) throws IOException {
+    // public static void main(String[] args) throws IOException {
 
-        if (args.length > 1) {
-            System.out.println("Usage: evala [script]");
-            System.exit(64);
-        } else if (args.length == 1) {
-            runFile(args[0]);
-        } else {
-            runPrompt();
+    //     if (args.length > 1) {
+    //         System.out.println("Usage: evala [script]");
+    //         System.exit(64);
+    //     } else if (args.length == 1) {
+    //         runFile(args[0]);
+    //     } else {
+    //         runPrompt();
+    //     }
+    // }
+       
+    //example on how to test lox parser, code up to ch10
+        public static void main(String[] args) {
+        // Create some test tokens for: "print 123 + 456;"
+        List<Token> tokens = Arrays.asList(
+        new Token(TokenType.PRINT, "print", null, 1),
+        new Token(TokenType.NUMBER, "123", 123.0, 1),
+        new Token(TokenType.PLUS, "+", null, 1),
+        new Token(TokenType.NUMBER, "456", 456.0, 1),
+        new Token(TokenType.SEMICOLON, ";", null, 1),
+        new Token(TokenType.EOF, "", null, 1)
+    );
+
+
+        // Create parser with test tokens
+        Parser parser = new Parser(tokens);
+
+        // Parse and print the result
+        try {
+            List<Stmt> statements = parser.parse();
+            for (Stmt stmt : statements) {
+                System.out.println(stmt.toString());
+            }
+        } catch (RuntimeException error) {
+            System.err.println("Parse error occurred!");
         }
     }
+    
 
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
