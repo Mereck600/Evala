@@ -1,11 +1,12 @@
 package evala;
 
-import static evala.TokenType.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
- 
+
+import static evala.TokenType.*;
+
 public class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
@@ -32,6 +33,7 @@ public class Scanner {
         keywords.put("true", TRUE);
         keywords.put("var", VAR);
         keywords.put("while", WHILE);
+        keywords.put("break", BREAK);
     }
 
     Scanner(String source) {

@@ -6,60 +6,36 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 public class Evala {
+    private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;
+    static boolean hadRuntimeError = false;
 
-    // public static void main(String[] args) throws IOException {
-    //     if (args.length > 1) {
-    //         System.out.println("Usage: Evala [script]");
-    //         System.exit(64);
-    //     } else if (args.length == 1) {
-    //         runFile(args[0]);
-    //     } else {
-    //         runPrompt();
-    //     }
-    // }
-        
-    //example on how to test lox parser, code up to ch10
-        public static void main(String[] args) {
-        // Create some test tokens for: "print 123 + 456;"
-        List<Token> tokens = Arrays.asList(
-            new Token(TokenType.PRINT, "print", null, 1),
-            new Token(TokenType.NUMBER, "123", 123.0, 1),
-            new Token(TokenType.PLUS, "+", null, 1),
-            new Token(TokenType.NUMBER, "456", 456.0, 1),
-            new Token(TokenType.COMMA, ";", null, 1),
-            new Token(TokenType.EOF, "", null, 1)
-        );
+    public static void main(String[] args) throws IOException {
 
-        // Create parser with test tokens
-        Parser parser = new Parser(tokens);
-
-        // Parse and print the result
-        try {
-            List<Stmt> statements = parser.parse();
-            for (Stmt stmt : statements) {
-                System.out.println(stmt.toString());
-            }
-        } catch (ParseError error) {
-            System.err.println("Parse error occurred!");
+        if (args.length > 1) {
+            System.out.println("Usage: evala [script]");
+            System.exit(64);
+        } else if (args.length == 1) {
+            runFile(args[0]);
+        } else {
+            runPrompt();
         }
     }
-    
 
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
         if (hadError) { System.exit(65); }
+        if (hadRuntimeError) { System.exit(70); }
     }
 
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
-        System.out.println("Welcome to Evala!");
+        System.out.println("Welcome to evala!");
 
         for (;;) {
             System.out.print("> ");
@@ -77,12 +53,14 @@ public class Evala {
         List<Token> tokens = scanner.scanTokens();
 
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
-    
+        List<Stmt> statements = parser.parse();
         // Stop if there was a syntax error.
         if (hadError) return;
-    
-        System.out.println(expression);
+
+        // Print the AST.
+        //System.out.println("Parsed expression: " + expression.toString());
+
+        interpreter.interpret(statements);
     }
 
     static void error(int line, String message) {
@@ -97,9 +75,14 @@ public class Evala {
 
     static void error(Token token, String message) {
         if (token.type == TokenType.EOF) {
-          report(token.line, " at end", message);
+            report(token.line, " at end", message);
         } else {
-          report(token.line, " at '" + token.lexeme + "'", message);
+            report(token.line, " at '" + token.lexeme + "'", message);
         }
-      }
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[Line " + error.token.line + "]");
+        hadRuntimeError = true;
+    }
 }
