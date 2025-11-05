@@ -14,6 +14,15 @@ public class Scanner {
     private int current = 0;
     private int line = 1;
 
+    // ADD: comment/line metrics for grading
+    private int singleLineCommentLines = 0;
+    private int blockCommentLines = 0;     // only used if you enable /* ... */
+    private int codeLines = 0;
+
+    // Track which line we already counted as "code" to avoid double-counting
+    private int lastCodeLineCounted = -1;
+
+
     private static final Map<String, TokenType> keywords;
     static {
         keywords = new HashMap<>();
@@ -68,14 +77,26 @@ public class Scanner {
             case '=' -> addToken(match('=') ? EQUAL_EQUAL : EQUAL);
             case '<' -> addToken(match('=') ? LESS_EQUAL : LESS);
             case '>' -> addToken(match('=') ? GREATER_EQUAL : GREATER);
-            case '/' -> {
+            case '/' -> { //change this to work with the new count comments
                 if (match('/')) {
-                    // A comment goes until the end of the line.
+                    singleLineCommentLines++;
                     while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+                    // consume /* ... */ and count lines inside
+                    int startLine = line;
+                    while (!isAtEnd()) {
+                        if (peek() == '\n') line++;
+                        if (peek() == '*' && peekNext() == '/') { advance(); advance(); break; }
+                        advance();
+                    }
+                    int consumed = Math.max(0, line - startLine);
+                    blockCommentLines += (consumed == 0 ? 1 : consumed); // count at least 1 line
                 } else {
                     addToken(SLASH);
                 }
             }
+
+
 
             case ' ', '\r', '\t' -> {} // Ignore whitespace.
             case '\n' -> line++;
@@ -178,9 +199,33 @@ public class Scanner {
     private void addToken(TokenType type) {
         addToken(type, null);
     }
-
+    //Changed to count code lines
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
+
+        if (type != TokenType.EOF && lastCodeLineCounted != line) {
+            // We don't count tokens that come only from whitespace/comments (we never add those anyway)
+            codeLines++;
+            lastCodeLineCounted = line;
+        }
+
+    }
+    //Check comments
+    public static final class CommentStats {
+        public final int singleLine;
+        public final int blockLines;
+        public final int codeLines;
+        public final int totalLines;
+        public CommentStats(int singleLine, int blockLines, int codeLines, int totalLines) {
+            this.singleLine = singleLine;
+            this.blockLines = blockLines;
+            this.codeLines  = codeLines;
+            this.totalLines = totalLines;
+        }
+    }
+    public CommentStats getCommentStats() {
+        // 'line' is 1-based and already tracks total lines as you scan
+        return new CommentStats(singleLineCommentLines, blockCommentLines, codeLines, line);
     }
 }

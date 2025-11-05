@@ -1,0 +1,20 @@
+# Evala static grading
+
+If without else: 1
+
+Magic numbers: 2
+  3.14
+  2.0
+
+Unused locals: 1
+  temp
+
+Unused parameters: 1
+  function add: debug
+
+Comment density:
+  total lines: 18
+  code lines:  9
+  comment lines: 9
+  ratio: 50.0%
+  verdict: Too many comments

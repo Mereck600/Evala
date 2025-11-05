@@ -27,31 +27,42 @@ public class Evala {
     // }
        
     //example on how to test lox parser, code up to ch10
-        public static void main(String[] args) {
-        // Create some test tokens for: "print 123 + 456;"
-        List<Token> tokens = Arrays.asList(
-        new Token(TokenType.PRINT, "print", null, 1),
-        new Token(TokenType.NUMBER, "123", 123.0, 1),
-        new Token(TokenType.PLUS, "+", null, 1),
-        new Token(TokenType.NUMBER, "456", 456.0, 1),
-        new Token(TokenType.SEMICOLON, ";", null, 1),
-        new Token(TokenType.EOF, "", null, 1)
-    );
+    //     public static void main(String[] args) {
+    //     // Create some test tokens for: "print 123 + 456;"
+    //     List<Token> tokens = Arrays.asList(
+    //     new Token(TokenType.PRINT, "print", null, 1),
+    //     new Token(TokenType.NUMBER, "123", 123.0, 1),
+    //     new Token(TokenType.PLUS, "+", null, 1),
+    //     new Token(TokenType.NUMBER, "456", 456.0, 1),
+    //     new Token(TokenType.SEMICOLON, ";", null, 1),
+    //     new Token(TokenType.EOF, "", null, 1)
+    // );
 
 
-        // Create parser with test tokens
-        Parser parser = new Parser(tokens);
+    //     // Create parser with test tokens
+    //     Parser parser = new Parser(tokens);
 
-        // Parse and print the result
-        try {
-            List<Stmt> statements = parser.parse();
-            for (Stmt stmt : statements) {
-                System.out.println(stmt.toString());
-            }
-        } catch (RuntimeException error) {
-            System.err.println("Parse error occurred!");
+    //     // Parse and print the result
+    //     try {
+    //         List<Stmt> statements = parser.parse();
+    //         for (Stmt stmt : statements) {
+    //             System.out.println(stmt.toString());
+    //         }
+    //     } catch (RuntimeException error) {
+    //         System.err.println("Parse error occurred!");
+    //     }
+    // }
+    public static void main(String[] args) throws IOException {
+        if (args.length > 1) {
+            System.out.println("Usage: evala [script]");
+            System.exit(64);
+        } else if (args.length == 1) {
+            runFile(args[0]);
+        } else {
+            runPrompt();
         }
-    }
+        }
+
     
 
     private static void runFile(String path) throws IOException {
@@ -88,6 +99,18 @@ public class Evala {
 
         // Print the AST.
         //System.out.println("Parsed expression: " + expression.toString());
+        // >>> grading: walk AST to collect usage (reads/writes/params) + structural checks
+        UsageCollector usage = new UsageCollector();           // NEW (see class below)
+        usage.walk(statements);
+
+        Grader grader = new Grader(scanner.getCommentStats(),  // NEW (see class below)
+                                usage.getUsage(),
+                                usage.getIfWithoutElse(),
+                                usage.getMagicNumbers());
+        GradeReport report = grader.grade();
+        report.writeToFile("grade");                            // writes ./grade
+        System.out.println(report.summaryLine());
+        // <<< grading
 
         interpreter.interpret(statements);
     }
