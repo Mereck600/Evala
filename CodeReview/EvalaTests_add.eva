@@ -1,0 +1,34 @@
+// =======================================================
+//            Evala Generated Test Files
+//     Note: These tests may not be comprehensive.
+//   Usage: Fill in expectedOutput and run the file.
+// ========================================================
+
+
+TestCase(add, args=[], expected=[100.0, 100.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[100.0, 0.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[100.0, -100.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[0.0, 100.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[0.0, 0.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[0.0, -100.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[-100.0, 100.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[-100.0, 0.0, null]), expectedOutput )
+
+
+TestCase(add, args=[], expected=[-100.0, -100.0, null]), expectedOutput )
+
+

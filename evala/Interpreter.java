@@ -9,6 +9,48 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private class BreakException extends RuntimeException {}
 
     Interpreter() {
+        globals.define("TestCase", new EvalaCallable() {
+            @Override
+            public int arity() {
+                // variable arity: we want TestCase("fn", arg1, ..., expected)
+                // we'll handle the count manually in call()
+                return -1; // see note on arity handling below
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                if (arguments.size() < 2) {
+                    // Need at least function name + expected
+                    throw new RuntimeError(
+                        new Token(TokenType.IDENTIFIER, "TestCase", null, -1),
+                        "TestCase(fnName, arg1, ..., expected) requires at least 2 arguments.");
+                }
+
+                Object fnNameObj = arguments.get(0);
+                if (!(fnNameObj instanceof String)) {
+                    throw new RuntimeError(
+                        new Token(TokenType.IDENTIFIER, "TestCase", null, -1),
+                        "First argument to TestCase must be a function name (string).");
+                }
+
+                String fnName = (String) fnNameObj;
+
+                // Last argument is expected value
+                Object expected = arguments.get(arguments.size() - 1);
+
+                // Everything between is a function argument
+                List<Object> args = new ArrayList<>();
+                for (int i = 1; i < arguments.size() - 1; i++) {
+                    args.add(arguments.get(i));
+                }
+
+                return new TestCase(fnName, args, expected);
+            }
+
+            @Override
+            public String toString() { return "<native TestCase>"; }
+        });
+
         globals.define("clock", new EvalaCallable() {
             @Override
             public int arity() { return 0; }
@@ -22,7 +64,75 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             @Override
             public String toString() { return "<native fn>"; }
         });
+        globals.define("runTests", new EvalaCallable() {
+            @Override
+            public int arity() {
+                // allow any number of TestCase arguments
+                return -1; 
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                int total = 0;
+                int passed = 0;
+
+                for (Object obj : arguments) {
+                    if (!(obj instanceof TestCase)) {
+                        System.out.println("[WARN] runTests: argument is not a TestCase: " + obj);
+                        continue;
+                    }
+                    total++;
+                    TestCase tc = (TestCase) obj;
+
+                    Object result = callFunctionByName(interpreter, tc.functionName, tc.args);
+                    boolean ok = java.util.Objects.equals(result, tc.expected);
+
+                    if (ok) {
+                        passed++;
+                        System.out.println("[PASS] " + tc.functionName + tc.args + " == " + tc.expected);
+                    } else {
+                        System.out.println("[FAIL] " + tc.functionName + tc.args
+                                + " expected: " + tc.expected
+                                + ", got: " + result);
+                    }
+                }
+
+                System.out.println("--- TEST SUMMARY ---");
+                System.out.println("Passed " + passed + " / " + total);
+
+                // return fraction passed (double)
+                if (total == 0) return 0.0;
+                return (double) passed / (double) total;
+            }
+
+            @Override
+            public String toString() { return "<native runTests>"; }
+         });
+
+        
+
     }
+    static Object callFunctionByName(Interpreter interpreter, String name, List<Object> args) {
+        // Create a fake Token just to reuse the existing Environment.get
+        Token nameToken = new Token(TokenType.IDENTIFIER, name, null, -1);
+
+        Object callee = interpreter.globals.get(nameToken);
+        if (!(callee instanceof EvalaCallable)) {
+            throw new RuntimeError(nameToken, "Test error: '" + name + "' is not a function.");
+        }
+
+        EvalaCallable fn = (EvalaCallable) callee;
+
+        int expectedArity = fn.arity();
+        if (expectedArity >= 0 && expectedArity != args.size()) {
+            throw new RuntimeError(nameToken,
+                "Test error: function '" + name + "' expects " + expectedArity
+            + " args but got " + args.size());
+        }
+
+        return fn.call(interpreter, args);
+}
+
 
     void interpret(List<Stmt> statements) {
         try {
@@ -96,9 +206,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         EvalaCallable function = (EvalaCallable)callee;
         if (arguments.size() != function.arity()) {
-            throw new RuntimeError(expr.paren, "Expected " +
+            int expected = function.arity();
+            if (expected >= 0 && arguments.size() != expected) {
+                throw new RuntimeError(expr.paren, "Expected " +
                     function.arity() + " arguments but got " +
                     arguments.size() + ".");
+            }
+           
         }
         return function.call(this, arguments);
     }

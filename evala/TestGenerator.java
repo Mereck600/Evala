@@ -44,30 +44,47 @@ class BooleanVar implements TestVariation {
     @Override public List<Object> representatives(){return Arrays.asList((Object)true,false);}
 }
 
-
 class TestCase {
-    String functionName;
-    List<Object> args;
-    TestCase(String functionName, List<Object> args) {
+    final String functionName;
+    final List<Object> args;
+    final Object expected;
+
+    // Constructor used from native TestCase(...) callable
+    TestCase(String functionName, List<Object> args, Object expected) {
         this.functionName = functionName;
-        this.args = args == null ? Collections.emptyList() : new ArrayList<>(args);
+        this.args = (args == null) ? Collections.emptyList() : new ArrayList<>(args);
+        this.expected = expected;
+    }
+
+
+    // new TestCase("add", 100.0, 0.0, null, 100.0)
+    TestCase(String functionName, Object... argsAndExpected) {
+        this.functionName = functionName;
+
+        if (argsAndExpected == null || argsAndExpected.length == 0) {
+            this.args = Collections.emptyList();
+            this.expected = null;
+        } else {
+            int n = argsAndExpected.length;
+            this.expected = argsAndExpected[n - 1];
+
+            Object[] argArray = Arrays.copyOf(argsAndExpected, n - 1);
+            this.args = Arrays.asList(argArray);
+        }
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("new TestCase(\"").append(functionName).append("\"");
-        for (Object a : args) {
-            sb.append(", ");
-            if (a == null) sb.append("nil");
-            else if (a instanceof String) sb.append("\"").append(a).append("\"");
-            else sb.append(a.toString());
-        }
+        sb.append("TestCase(").append(functionName);
+        sb.append(", args=").append(args);
+        sb.append(", expected=").append(expected);
         sb.append(")");
         return sb.toString();
     }
-
 }
+
+
 
 
 public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {

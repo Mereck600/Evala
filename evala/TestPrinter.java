@@ -11,7 +11,7 @@ public class TestPrinter {
     public void writeToFile(String filename){
         String dirPath = "CodeReview";
         java.io.File dir = new java.io.File(dirPath);
-
+        filename = filename +".eva";
         // Create directory if missing
         if (!dir.exists()) dir.mkdirs();
 
@@ -19,12 +19,23 @@ public class TestPrinter {
         String fullPath = dirPath + "/" + filename;
 
         try (PrintWriter out = new PrintWriter(fullPath)) {
-            out.println("// Evala Generated Test Files");
-            out.println("// Note: These tests may not be comprehensive.");
+             out.println("// =======================================================");
+            out.println("//            Evala Generated Test Files");
+            out.println("//     Note: These tests may not be comprehensive.");
+            out.println("//   Usage: Fill in expectedOutput and run the file.");
+            out.println("// ========================================================");
+            out.println("\n");
+
             for (TestCase tc : generated) { //generate the test file here 
-                out.println(tc);
+                //have now: new TestCase(("add", 100.0, 100.0, nil)
+                //new TestCase(("add", 100.0, 100.0, nil) expectedOutput)
+                String res = tc.toString() +", expectedOutput )";
+                out.println(res);
+                out.println("\n");
                 }
+                
             out.flush();
+            System.out.println("Test cases generated to: "+ fullPath);
 
         }catch(Exception e){
             System.err.println("Failed to write grade file: "+ e);

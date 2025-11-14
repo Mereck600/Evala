@@ -15,4 +15,12 @@ fun add(a, b, debug) {      // 'debug' is unused
   return a + -b;
 }
 
+fun sub(a, b, debug) {      // 'debug' is unused
+  if (a < b) {              // if without else
+    return a - b - 3.14;    // magic number 3.14
+  }
+   
+  return a + -b;
+}
+
 print add(used, 2, 0);      // 2 is allowed? (not whitelisted unless you add it)

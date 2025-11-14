@@ -130,7 +130,8 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
           stmt.name == null ? "<anonymous>" : stmt.name.lexeme,
           stmt.params);
       TestPrinter tp = new TestPrinter(generated);
-      tp.writeToFile("EvalaTests"+);
+      tp.writeToFile("EvalaTests_"+stmt.name.lexeme);
+
       // for (TestCase tc : generated) { //generate the test file here 
       //   System.out.println(tc);
 
