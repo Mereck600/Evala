@@ -1,0 +1,5 @@
+
+test add(-2, -4, false)  0;
+test add(2, 3, false)  0;
+test add(3, 3, false)  0;
+test add(4, 3, false)  0;

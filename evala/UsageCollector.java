@@ -18,7 +18,14 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
   // Track when we're visiting a var or assignment initializer this fixes magic number issue
     private boolean inAssignmentInitializer = false;
 
+  private final Deque<FnUsage> fnStack = new ArrayDeque<>();
+  private final List<FnUsage> fnList = new ArrayList<>();
 
+  // Structural/style metrics
+  private int ifWithoutElse = 0;
+  private final List<MagicNumber> magicNumbers = new ArrayList<>();
+
+  
   // Function -> params and paramsRead
   public static final class FnUsage {
     final String fnName;
@@ -30,12 +37,6 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
         }else{this.fnName=name;} 
     }
   }
-  private final Deque<FnUsage> fnStack = new ArrayDeque<>();
-  private final List<FnUsage> fnList = new ArrayList<>();
-
-  // Structural/style metrics
-  private int ifWithoutElse = 0;
-  private final List<MagicNumber> magicNumbers = new ArrayList<>();
 
   // literal token line reporting
   public static final class MagicNumber {
@@ -115,6 +116,16 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
     for (Stmt s : stmt.body) s.accept(this);
     fnStack.pop();
     fnList.add(fu);
+
+    if (fnStack.size() == 0) {
+      TestGenerator tg = new TestGenerator(stmt.params);
+      for (Stmt s : stmt.body) s.accept(tg);
+      System.out.println(tg);
+
+      // look through the test variations collected for each parameter in tg.varCases
+      //  make test cases to call that function based on those variations
+    }
+
     return null;
   }
 
