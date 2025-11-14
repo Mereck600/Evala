@@ -50,8 +50,16 @@ public final class GradeReport {
       comments.ratio * 100.0, comments.verdict);
   }
   /**Write to a file w/ the grades given */
-  public void writeToFile(String path) {
-    try (PrintWriter out = new PrintWriter(path)) {
+  public void writeToFile(String filename) {
+        String dirPath = "CodeReview";
+        java.io.File dir = new java.io.File(dirPath);
+
+        // Create directory if missing
+        if (!dir.exists()) dir.mkdirs();
+
+        // Build full path
+        String fullPath = dirPath + "/" + filename;
+    try (PrintWriter out = new PrintWriter(fullPath)) {
       out.println("# Evala static grading\n");
 
       out.printf("If without else: %d%n%n", ifWithoutElse);

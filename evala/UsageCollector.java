@@ -123,7 +123,18 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
       System.out.println(tg);
 
       // look through the test variations collected for each parameter in tg.varCases
-      //  make test cases to call that function based on those variations
+      // build concrete TestCase objects by combining representative values
+      // for each parameter (no nested if/else; each variation provides its
+      // representative values via polymorphism).
+      List<TestCase> generated = tg.generateTestCases( 
+          stmt.name == null ? "<anonymous>" : stmt.name.lexeme,
+          stmt.params);
+      TestPrinter tp = new TestPrinter(generated);
+      tp.writeToFile("EvalaTests"+);
+      // for (TestCase tc : generated) { //generate the test file here 
+      //   System.out.println(tc);
+
+      // }
     }
 
     return null;

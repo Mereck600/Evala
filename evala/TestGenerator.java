@@ -22,19 +22,51 @@ import evala.Stmt.While;
 
 
 
-interface TestVariation { }          // context
+interface TestVariation {            // context
+    /**
+     * Representative concrete values for this variation. The generator will
+     * combine these across parameters to build test cases. A value of null
+     * denotes a "nil" / omitted argument.
+     */
+    List<Object> representatives();
+}
 
-class NoInfoVar implements TestVariation {}
-class PosNegZeroVar implements TestVariation {}
+class NoInfoVar implements TestVariation {
+    @Override public List<Object> representatives() { return Arrays.asList((Object) null); }
+}
 
-class BooleanVar implements TestVariation {}
+class PosNegZeroVar implements TestVariation {
+    @Override public List<Object> representatives() { return Arrays.asList((Object)100.0, 0.0, -100.0); }
+}
+
+class BooleanVar implements TestVariation {
+    
+    @Override public List<Object> representatives(){return Arrays.asList((Object)true,false);}
+}
 
 
 class TestCase {
     String functionName;
     List<Object> args;
+    TestCase(String functionName, List<Object> args) {
+        this.functionName = functionName;
+        this.args = args == null ? Collections.emptyList() : new ArrayList<>(args);
+    }
 
-    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("new TestCase(\"").append(functionName).append("\"");
+        for (Object a : args) {
+            sb.append(", ");
+            if (a == null) sb.append("nil");
+            else if (a instanceof String) sb.append("\"").append(a).append("\"");
+            else sb.append(a.toString());
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
 }
 
 
@@ -48,6 +80,48 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         for (Token tok : params) {
             varCases.put(tok.lexeme, curContext);
         }
+    }
+
+    /**
+     * Build test cases for the given function name and parameter list using
+     * the variation information collected in {@link #varCases}.
+     */
+    public List<TestCase> generateTestCases(String functionName, List<Token> params) {
+        // For each parameter, obtain the representative values
+        List<List<Object>> domain = new ArrayList<>();
+        for (Token p : params) { 
+            TestVariation tv = varCases.get(p.lexeme);
+            if (tv == null) tv = new NoInfoVar();
+            List<Object> reps = tv.representatives();
+            // ensure non-empty domain
+            if (reps == null || reps.isEmpty()) reps = Arrays.asList((Object) null);
+            domain.add(reps);
+        }
+
+        // Cartesian product over domains
+        List<List<Object>> combos = cartesianProduct(domain);
+        List<TestCase> out = new ArrayList<>();
+        for (List<Object> c : combos) out.add(new TestCase(functionName, c));
+        return out;
+    }
+
+    private static List<List<Object>> cartesianProduct(List<List<Object>> lists) {
+        List<List<Object>> result = new ArrayList<>();
+        if(lists == null || lists.isEmpty()){result.add(new ArrayList<>() ); return result;}
+        // iterative product
+        result.add(new ArrayList<>());
+        for (List<Object> pool : lists) {
+            List<List<Object>> next = new ArrayList<>();
+            for (List<Object> acc : result) {
+                for (Object item : pool) {
+                    List<Object> extended = new ArrayList<>(acc);
+                    extended.add(item);
+                    next.add(extended);
+                }
+            }
+            result = next;
+        }
+        return result;
     }
 
 
@@ -143,8 +217,21 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     @Override
     public Void visitBinaryExpr(Binary expr) {
         if (expr == null) return null;
-        if (expr.left != null) expr.left.accept(this);
-        if (expr.right != null) expr.right.accept(this);
+        if(expr.operator.type == TokenType.PLUS ||
+            expr.operator.type== TokenType.MINUS ||
+            expr.operator.type== TokenType.SLASH ||
+            expr.operator.type== TokenType.STAR){
+
+                TestVariation saveContext = curContext;
+                curContext = new PosNegZeroVar();
+                if (expr.left != null) expr.left.accept(this);
+                if (expr.right != null) expr.right.accept(this);
+                curContext=saveContext;
+            }else{
+                 if (expr.left != null) expr.left.accept(this);
+                 if (expr.right != null) expr.right.accept(this);
+            }   
+       
         return null;
     }
 
@@ -187,6 +274,7 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         if (expr.operator.type == TokenType.MINUS) {
             curContext = new PosNegZeroVar();
         }
+
 
         if (expr.right != null) expr.right.accept(this);
 

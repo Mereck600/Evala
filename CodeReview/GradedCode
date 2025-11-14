@@ -13,8 +13,8 @@ Unused parameters: 1
   function add: debug
 
 Comment density:
-  total lines: 18
+  total lines: 19
   code lines:  9
   comment lines: 9
-  ratio: 50.0%
+  ratio: 47.4%
   verdict: Too many comments
