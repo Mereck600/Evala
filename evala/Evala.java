@@ -69,6 +69,7 @@ public class Evala {
         Grader grader = new Grader(scanner.getCommentStats(),  // NEW (see class below)
                                 usage.getUsage(),
                                 usage.getIfWithoutElse(),
+                                usage.getIfTotal(),
                                 usage.getMagicNumbers());
         GradeReport report = grader.grade();
         report.writeToFile("GradedCode");                            // writes ./grade

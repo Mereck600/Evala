@@ -3,6 +3,8 @@ package evala;
 import java.io.PrintWriter;
 import java.util.*;
 
+import evala.UsageCollector.MagicNumber;
+
 public final class GradeReport {
 
   public static final class Magic {
@@ -30,24 +32,32 @@ public final class GradeReport {
   private final Set<String> unusedLocals;
   private final List<UnusedParam> unusedParams;
   private final CommentAnalysis comments;
+  private final int gradeLocals;
+  private final int gradeParams;
+  private final int ifTotal;
 
   public GradeReport(int ifWithoutElse,
                      List<Magic> magicNumbers,
                      Set<String> unusedLocals,
                      List<UnusedParam> unusedParams,
-                     CommentAnalysis comments) {
+                     CommentAnalysis comments, int gradeLocals, int gradeParams,int ifTotal) {
         this.ifWithoutElse = ifWithoutElse;
         this.magicNumbers = magicNumbers;
         this.unusedLocals = unusedLocals;
         this.unusedParams = unusedParams;
         this.comments = comments;
+        this.gradeLocals = gradeLocals;
+        this.gradeParams = gradeParams;
+        this.ifTotal = ifTotal;
     }
     /**This is the formatted printer for the grade! */
   public String summaryLine() {
-    return String.format(
-      "Grade: if-no-else=%d, magic=%d, unused-locals=%d, unused-params=%d, comments=%.1f%% (%s)",
-      ifWithoutElse, magicNumbers.size(), unusedLocals.size(), unusedParams.size(),
-      comments.ratio * 100.0, comments.verdict);
+    // return String.format(
+    //   "Grade: if-no-else=%d, magic=%d, unused-locals=%d, unused-params=%d, comments=%.1f%% (%s)",
+    //   ifWithoutElse, magicNumbers.size(), unusedLocals.size(), unusedParams.size(),
+    //   comments.ratio * 100.0, comments.verdict);
+    //return "Grade written to CodeReview/GradedCode.md, Total Grade: ";
+    return "";
   }
   /**Write to a file w/ the grades given */
   public void writeToFile(String filename) {
@@ -58,11 +68,23 @@ public final class GradeReport {
         if (!dir.exists()) dir.mkdirs();
 
         // Build full path
-        String fullPath = dirPath + "/" + filename;
+        String fullPath = dirPath + "/" + filename+".md";
     try (PrintWriter out = new PrintWriter(fullPath)) {
       out.println("# Evala static grading\n");
 
+     // System.out.println("if total "+ (ifTotal - ifWithoutElse));
+      int ifCalc=0;
+      if(ifTotal - ifWithoutElse == 0){
+        ifCalc = 20;
+      }else{
+        ifCalc= ifTotal- ifWithoutElse;
+      }
+      int gradeIfs = Math.min( 20 -ifCalc,20);
+      out.println("// "+gradeIfs+"/20");
       out.printf("If without else: %d%n%n", ifWithoutElse);
+
+      int magicGrade= Math.max( 20 - magicNumbers.size(),0);
+      out.println("// "+magicGrade+"/20");
 
       out.printf("Magic numbers: %d%n", magicNumbers.size());
       for (var m : magicNumbers) {
@@ -70,21 +92,31 @@ public final class GradeReport {
         else out.printf("  %s%n", m.lexeme);
       }
       out.println();
-
+      out.println("// "+ gradeLocals+"/20");
       out.printf("Unused locals: %d%n", unusedLocals.size());
       for (String n : unusedLocals) out.printf("  %s%n", n);
       out.println();
 
+
+      out.println("// "+gradeParams+"/20");
       out.printf("Unused parameters: %d%n", unusedParams.size());
       for (var up : unusedParams) out.printf("  function %s: %s%n", up.functionName, up.paramName);
       out.println();
 
+      //grade
       out.println("Comment density:");
       out.printf("  total lines: %d%n", comments.totalLines);
       out.printf("  code lines:  %d%n", comments.codeLines);
       out.printf("  comment lines: %d%n", comments.commentLines);
       out.printf("  ratio: %.1f%%%n", comments.ratio * 100.0);
       out.printf("  verdict: %s%n", comments.verdict);
+      int finalGrade = gradeIfs+gradeLocals+gradeParams+magicGrade;
+      out.println("\n # Total Grade: "+finalGrade+"/100");
+     
+      System.out.println("Grade written to CodeReview/GradedCode.md, Total Grade: "+finalGrade+"/100");
+       System.out.println("-------------------------");
+      System.out.println("Code Execution output ...");
+      
       out.flush();
     } catch (Exception e) {
       System.err.println("Failed to write grade file: " + e);

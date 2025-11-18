@@ -16,13 +16,14 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
   private final Set<String> writes = new HashSet<>();
   private final Set<String> reads  = new HashSet<>();
   // Track when we're visiting a var or assignment initializer this fixes magic number issue
-    private boolean inAssignmentInitializer = false;
+  private boolean inAssignmentInitializer = false;
 
   private final Deque<FnUsage> fnStack = new ArrayDeque<>();
   private final List<FnUsage> fnList = new ArrayList<>();
 
   // Structural/style metrics
   private int ifWithoutElse = 0;
+  private int ifTotal =0;
   private final List<MagicNumber> magicNumbers = new ArrayList<>();
 
   
@@ -55,6 +56,7 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
   }
 
   public int getIfWithoutElse() { return ifWithoutElse; }
+  public int getIfTotal(){return ifTotal;}
   public List<MagicNumber> getMagicNumbers() { return magicNumbers; }
 
   public static final class Usage {
@@ -96,7 +98,13 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
   }
 
   @Override public Void visitIfStmt(Stmt.If stmt) {
-    if (stmt.elseBranch == null) ifWithoutElse++;
+    ifTotal++;
+    //System.out.println("iftotal from usage col: "+ifTotal);
+    if (stmt.elseBranch == null){
+      ifWithoutElse++;
+     // System.out.println("no else from usage col: "+ifWithoutElse);
+
+    } 
     stmt.condition.accept(this);
     stmt.thenBranch.accept(this);
     if (stmt.elseBranch != null) stmt.elseBranch.accept(this);
@@ -120,7 +128,7 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
     if (fnStack.size() == 0) {
       TestGenerator tg = new TestGenerator(stmt.params);
       for (Stmt s : stmt.body) s.accept(tg);
-      System.out.println(tg);
+      //System.out.println(tg);
 
       // look through the test variations collected for each parameter in tg.varCases
       // build concrete TestCase objects by combining representative values
