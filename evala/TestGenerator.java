@@ -22,6 +22,7 @@ import evala.Stmt.While;
 
 
 
+
 interface TestVariation {            // context
     /**
      * Representative concrete values for this variation. The generator will
@@ -32,11 +33,15 @@ interface TestVariation {            // context
 }
 
 class NoInfoVar implements TestVariation {
+
     @Override public List<Object> representatives() { return Arrays.asList((Object) "nil"); }
 }
 
 class PosNegZeroVar implements TestVariation {
-    @Override public List<Object> representatives() { return Arrays.asList((Object)100.0, 0.0, -100.0); }
+    int x = Math.abs(java.util.concurrent.ThreadLocalRandom.current().nextInt());
+    int y = Math.abs(java.util.concurrent.ThreadLocalRandom.current().nextInt());
+
+    @Override public List<Object> representatives() { return Arrays.asList((Object) x, 0.0, -y); }
 }
 
 class BooleanVar implements TestVariation {

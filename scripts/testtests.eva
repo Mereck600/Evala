@@ -5,7 +5,7 @@ fun bleh(a, b, debug) {
   return a + -b;
 }
 
-var t1 = TestCase("bleh",100.0, 0.0, null, 100.0);
+var t1 = TestCase("bleh",100.0, 0.0, nil, 100.0);
 var t2 = TestCase("bleh", 343.0, -452.0, nil, -109.0);
 var t3 = TestCase("bleh", 343.0, -452.0, nil, -109.0);
 

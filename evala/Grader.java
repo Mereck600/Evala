@@ -8,8 +8,8 @@ public final class Grader {
   private final UsageCollector.Usage usage;
   private final int ifWithoutElse;
   private final List<UsageCollector.MagicNumber> numericLiterals;
-  public int gradeLocals;
-  public int gradeParams; 
+  public double gradeLocals;
+  public double gradeParams; 
   public int ifTotal;
 
   
@@ -38,8 +38,8 @@ public final class Grader {
     unusedLocals.removeAll(usage.reads);
     // System.out.println("Number of locals: "+usage.writes.size());
     // System.out.println("Number of unused locals "+unusedLocals.size());
-
-    gradeLocals = Math.min (20 -(usage.writes.size() - unusedLocals.size()), 20); // not sure if the min is needed 
+    //20.0 *  (ifTotal - ifWithoutElse) / ifTotal;
+     gradeLocals =20* (usage.writes.size() - unusedLocals.size())/usage.writes.size();//Math.min (20 -(usage.writes.size() - unusedLocals.size()), 20); // not sure if the min is needed 
     //System.out.println("local Grade: "+gradeLocals); 
     
 
@@ -58,7 +58,7 @@ public final class Grader {
     // System.out.println("Number of fun params: "+ funParamCount);
     // System.out.println("Number of unsed "+unusedParams.size());
 
-    gradeParams = Math.min(20 - (funParamCount- unusedParams.size()), 20); 
+    gradeParams = 20 * (funParamCount - unusedParams.size())/funParamCount; // Math.min(20 - (funParamCount- unusedParams.size()), 20); 
    // System.out.println("Param Grade: "+gradeParams); 
     
 

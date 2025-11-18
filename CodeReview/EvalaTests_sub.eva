@@ -5,31 +5,31 @@
 // ========================================================
 
 
-var t1 = TestCase("sub", 100.0, 100.0, nil, expectedOutput );
+var t1 = TestCase("sub", 315380207, 892356893, nil, expectedOutput );
 
 
-var t2 = TestCase("sub", 100.0, 0.0, nil, expectedOutput );
+var t2 = TestCase("sub", 315380207, 0.0, nil, expectedOutput );
 
 
-var t3 = TestCase("sub", 100.0, -100.0, nil, expectedOutput );
+var t3 = TestCase("sub", 315380207, -1540321117, nil, expectedOutput );
 
 
-var t4 = TestCase("sub", 0.0, 100.0, nil, expectedOutput );
+var t4 = TestCase("sub", 0.0, 892356893, nil, expectedOutput );
 
 
 var t5 = TestCase("sub", 0.0, 0.0, nil, expectedOutput );
 
 
-var t6 = TestCase("sub", 0.0, -100.0, nil, expectedOutput );
+var t6 = TestCase("sub", 0.0, -1540321117, nil, expectedOutput );
 
 
-var t7 = TestCase("sub", -100.0, 100.0, nil, expectedOutput );
+var t7 = TestCase("sub", -2004745817, 892356893, nil, expectedOutput );
 
 
-var t8 = TestCase("sub", -100.0, 0.0, nil, expectedOutput );
+var t8 = TestCase("sub", -2004745817, 0.0, nil, expectedOutput );
 
 
-var t9 = TestCase("sub", -100.0, -100.0, nil, expectedOutput );
+var t9 = TestCase("sub", -2004745817, -1540321117, nil, expectedOutput );
 
 
 runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );
