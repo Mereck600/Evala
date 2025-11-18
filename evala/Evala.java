@@ -14,44 +14,7 @@ public class Evala {
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
 
-    // public static void main(String[] args) throws IOException {
-
-    //     if (args.length > 1) {
-    //         System.out.println("Usage: evala [script]");
-    //         System.exit(64);
-    //     } else if (args.length == 1) {
-    //         runFile(args[0]);
-    //     } else {
-    //         runPrompt();
-    //     }
-    // }
-       
-    //example on how to test lox parser, code up to ch10
-    //     public static void main(String[] args) {
-    //     // Create some test tokens for: "print 123 + 456;"
-    //     List<Token> tokens = Arrays.asList(
-    //     new Token(TokenType.PRINT, "print", null, 1),
-    //     new Token(TokenType.NUMBER, "123", 123.0, 1),
-    //     new Token(TokenType.PLUS, "+", null, 1),
-    //     new Token(TokenType.NUMBER, "456", 456.0, 1),
-    //     new Token(TokenType.SEMICOLON, ";", null, 1),
-    //     new Token(TokenType.EOF, "", null, 1)
-    // );
-
-
-    //     // Create parser with test tokens
-    //     Parser parser = new Parser(tokens);
-
-    //     // Parse and print the result
-    //     try {
-    //         List<Stmt> statements = parser.parse();
-    //         for (Stmt stmt : statements) {
-    //             System.out.println(stmt.toString());
-    //         }
-    //     } catch (RuntimeException error) {
-    //         System.err.println("Parse error occurred!");
-    //     }
-    // }
+  
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: evala [script]");
@@ -75,7 +38,7 @@ public class Evala {
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
-        System.out.println("Welcome to evala!");
+        System.out.println("Welcome to Evala!");
 
         for (;;) {
             System.out.print("> ");
@@ -106,9 +69,10 @@ public class Evala {
         Grader grader = new Grader(scanner.getCommentStats(),  // NEW (see class below)
                                 usage.getUsage(),
                                 usage.getIfWithoutElse(),
+                                usage.getIfTotal(),
                                 usage.getMagicNumbers());
         GradeReport report = grader.grade();
-        report.writeToFile("grade");                            // writes ./grade
+        report.writeToFile("GradedCode");                            // writes ./grade
         System.out.println(report.summaryLine());
         // <<< grading
 

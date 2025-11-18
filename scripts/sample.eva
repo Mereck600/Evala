@@ -6,12 +6,22 @@
 
 var used = 11;               // used later, allowed magic (1)
 var temp = 42;              // unused local + magic number (42)
+var bleh = 21;
 
-fun add(a, b, debug) {      // 'debug' is unused
+fun add(a, b, debug,twenty) {      // 'debug' is unused
   if (a < b) {              // if without else
     return a + b + 3.14;    // magic number 3.14
   }
+   
   return a + b;
 }
 
-print add(used, 2, 0);      // 2 is allowed? (not whitelisted unless you add it)
+fun sub(a, b, debug) {      // 'debug' is unused
+  if (a < b) {              // if without else
+    return a - b - 3.14;    // magic number 3.14
+  }
+   
+  return a - b;
+}
+
+print add(used, 2, 0,0);      // 2 is allowed? (not whitelisted unless you add it)
