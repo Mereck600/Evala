@@ -1,7 +1,5 @@
 package evala;
 
-import java.util.*;
-
 import evala.Expr.Assign;
 import evala.Expr.Binary;
 import evala.Expr.Call;
@@ -19,6 +17,7 @@ import evala.Stmt.Print;
 import evala.Stmt.Return;
 import evala.Stmt.Var;
 import evala.Stmt.While;
+import java.util.*;
 
 
 
@@ -38,8 +37,8 @@ class NoInfoVar implements TestVariation {
 }
 
 class PosNegZeroVar implements TestVariation {
-    int x = Math.abs(java.util.concurrent.ThreadLocalRandom.current().nextInt());
-    int y = Math.abs(java.util.concurrent.ThreadLocalRandom.current().nextInt());
+    int x = java.util.concurrent.ThreadLocalRandom.current().nextInt(1000001);
+    int y = java.util.concurrent.ThreadLocalRandom.current().nextInt(1000001);
 
     @Override public List<Object> representatives() { return Arrays.asList((Object) x, 0.0, -y); }
 }

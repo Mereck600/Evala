@@ -1,9 +1,8 @@
 package evala;
 
 import java.io.PrintWriter;
-import java.util.*;
 import java.text.DecimalFormat;
-import evala.UsageCollector.MagicNumber;
+import java.util.*;
 
 public final class GradeReport {
 
@@ -104,7 +103,7 @@ public final class GradeReport {
       for (var up : unusedParams) out.printf("  function %s: %s%n", up.functionName, up.paramName);
       out.println();
 
-      double commentGrade = (20 - Math.abs(50 - (comments.ratio *100.0)));
+      double commentGrade = Math.max(0, (20 - Math.abs(50 - (comments.ratio *100.0))));
       DecimalFormat df  = new DecimalFormat("#.##");
       String formatted = df.format(commentGrade);
 
@@ -115,11 +114,12 @@ public final class GradeReport {
       out.printf("  comment lines: %d%n", comments.commentLines);
       out.printf("  ratio: %.1f%%%n", comments.ratio * 100.0);
       out.printf("  verdict: %s%n", comments.verdict);
-      double finalGrade = gradeIfs+gradeLocals+gradeParams+magicGrade;
-      out.println("\n # Total Grade: "+finalGrade+"/100.0");
+      double finalGrade = gradeIfs+gradeLocals+gradeParams+magicGrade+commentGrade;
+      String endGrade = df.format(finalGrade);
+      out.println("\n # Total Grade: "+endGrade+"/100.0");
      
-      System.out.println("Grade written to CodeReview/GradedCode.md, Total Grade: "+finalGrade+"/100.0");
-       System.out.println("\n -------------------------");
+      System.out.println("Grade written to: CodeReview/GradedCode.md \nTotal Grade: "+endGrade+"/100.0");
+       System.out.println("\n-------------------------");
       System.out.println("Code Execution output ...");
       
       out.flush();

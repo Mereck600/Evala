@@ -13,7 +13,7 @@ fun add(a, b, debug,twenty) {      // 'debug' is unused
     return a + b + 3.14;    // magic number 3.14
   }
    
-  return a + -b;
+  return a + b;
 }
 
 fun sub(a, b, debug) {      // 'debug' is unused
@@ -21,7 +21,7 @@ fun sub(a, b, debug) {      // 'debug' is unused
     return a - b - 3.14;    // magic number 3.14
   }
    
-  return a + -b;
+  return a - b;
 }
 
 print add(used, 2, 0,0);      // 2 is allowed? (not whitelisted unless you add it)
