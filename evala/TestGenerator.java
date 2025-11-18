@@ -32,7 +32,7 @@ interface TestVariation {            // context
 }
 
 class NoInfoVar implements TestVariation {
-    @Override public List<Object> representatives() { return Arrays.asList((Object) null); }
+    @Override public List<Object> representatives() { return Arrays.asList((Object) "nil"); }
 }
 
 class PosNegZeroVar implements TestVariation {
@@ -48,6 +48,7 @@ class TestCase {
     final String functionName;
     final List<Object> args;
     final Object expected;
+    public int index;
 
     // Constructor used from native TestCase(...) callable
     TestCase(String functionName, List<Object> args, Object expected) {
@@ -58,8 +59,9 @@ class TestCase {
 
 
     // new TestCase("add", 100.0, 0.0, null, 100.0)
-    TestCase(String functionName, Object... argsAndExpected) {
+    TestCase(String functionName,int index, Object... argsAndExpected) {
         this.functionName = functionName;
+        this.index=index;
 
         if (argsAndExpected == null || argsAndExpected.length == 0) {
             this.args = Collections.emptyList();
@@ -76,10 +78,14 @@ class TestCase {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("TestCase(").append(functionName);
-        sb.append(", args=").append(args);
-        sb.append(", expected=").append(expected);
-        sb.append(")");
+        String exp = expected.toString();
+       
+        sb.append("var t").append(index).append(" = ");
+
+        sb.append("TestCase(").append("\"").append(functionName).append("\"");
+       // sb.append(", args=").append(args);
+        sb.append(", ").append(exp.substring(1,exp.length()-1 ));
+        
         return sb.toString();
     }
 }
@@ -103,7 +109,7 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
      * Build test cases for the given function name and parameter list using
      * the variation information collected in {@link #varCases}.
      */
-    public List<TestCase> generateTestCases(String functionName, List<Token> params) {
+    public List<TestCase> generateTestCases(String functionName,int index, List<Token> params) {
         // For each parameter, obtain the representative values
         List<List<Object>> domain = new ArrayList<>();
         for (Token p : params) { 
@@ -118,7 +124,7 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         // Cartesian product over domains
         List<List<Object>> combos = cartesianProduct(domain);
         List<TestCase> out = new ArrayList<>();
-        for (List<Object> c : combos) out.add(new TestCase(functionName, c));
+        for (List<Object> c : combos) out.add(new TestCase(functionName,index++, c));
         return out;
     }
 

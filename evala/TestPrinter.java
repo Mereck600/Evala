@@ -29,12 +29,26 @@ public class TestPrinter {
             for (TestCase tc : generated) { //generate the test file here 
                 //have now: new TestCase(("add", 100.0, 100.0, nil)
                 //new TestCase(("add", 100.0, 100.0, nil) expectedOutput)
-                String res = tc.toString() +", expectedOutput )";
+                String res = tc.toString() +", expectedOutput );";
                 out.println(res);
                 out.println("\n");
                 }
-                
+            //String runCount="runTests(";
+            StringBuilder runCount = new StringBuilder();
+            runCount.append("runTests(");
+            for (int i=0; i<= generated.size(); i++){
+                runCount.append("t");
+                runCount.append(i);
+                runCount.append(", ");
+            }
+            runCount.append(");");
+            runCount.delete(runCount.length()-4, runCount.length()-3);
+            //System.out.println("Len "+runCount.length());
+            //System.out.println(runCount);
+            out.println(runCount);
             out.flush();
+           
+
             System.out.println("Test cases generated to: "+ fullPath);
 
         }catch(Exception e){

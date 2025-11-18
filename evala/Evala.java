@@ -38,7 +38,7 @@ public class Evala {
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
-        System.out.println("Welcome to evala!");
+        System.out.println("Welcome to Evala!");
 
         for (;;) {
             System.out.print("> ");

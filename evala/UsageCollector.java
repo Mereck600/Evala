@@ -128,6 +128,7 @@ public final class UsageCollector implements Expr.Visitor<Void>, Stmt.Visitor<Vo
       // representative values via polymorphism).
       List<TestCase> generated = tg.generateTestCases( 
           stmt.name == null ? "<anonymous>" : stmt.name.lexeme,
+          1,
           stmt.params);
       TestPrinter tp = new TestPrinter(generated);
       tp.writeToFile("EvalaTests_"+stmt.name.lexeme);

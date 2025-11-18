@@ -5,30 +5,31 @@
 // ========================================================
 
 
-TestCase(add, args=[], expected=[100.0, 100.0, null]), expectedOutput )
+var t1 = TestCase("add", 100.0, 100.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[100.0, 0.0, null]), expectedOutput )
+var t2 = TestCase("add", 100.0, 0.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[100.0, -100.0, null]), expectedOutput )
+var t3 = TestCase("add", 100.0, -100.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[0.0, 100.0, null]), expectedOutput )
+var t4 = TestCase("add", 0.0, 100.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[0.0, 0.0, null]), expectedOutput )
+var t5 = TestCase("add", 0.0, 0.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[0.0, -100.0, null]), expectedOutput )
+var t6 = TestCase("add", 0.0, -100.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[-100.0, 100.0, null]), expectedOutput )
+var t7 = TestCase("add", -100.0, 100.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[-100.0, 0.0, null]), expectedOutput )
+var t8 = TestCase("add", -100.0, 0.0, nil, expectedOutput );
 
 
-TestCase(add, args=[], expected=[-100.0, -100.0, null]), expectedOutput )
+var t9 = TestCase("add", -100.0, -100.0, nil, expectedOutput );
 
 
+runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );

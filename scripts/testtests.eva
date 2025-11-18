@@ -2,10 +2,11 @@ fun bleh(a, b, debug) {
   if (a < b) {
     return a + b;
   }
-  return a + b;
+  return a + -b;
 }
 
-var t1 = TestCase("bleh", 100.0, 0.0, nil, 100.0);
+var t1 = TestCase("bleh",100.0, 0.0, null, 100.0);
 var t2 = TestCase("bleh", 343.0, -452.0, nil, -109.0);
+var t3 = TestCase("bleh", 343.0, -452.0, nil, -109.0);
 
-runTests(t1, t2);
+runTests(t1, t2,t3);
