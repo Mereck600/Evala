@@ -5,31 +5,31 @@
 // ========================================================
 
 
-TestCases("add", [35979, 35979]), expectedOutput );
+TestCases("add", [723031, 723031]), expectedOutput );
 
 
-TestCases("add", [35979, 0.0]), expectedOutput );
+TestCases("add", [723031, 0.0]), expectedOutput );
 
 
-TestCases("add", [35979, -297692]), expectedOutput );
+TestCases("add", [723031, -847239]), expectedOutput );
 
 
-TestCases("add", [0.0, 35979]), expectedOutput );
+TestCases("add", [0.0, 723031]), expectedOutput );
 
 
 TestCases("add", [0.0, 0.0]), expectedOutput );
 
 
-TestCases("add", [0.0, -297692]), expectedOutput );
+TestCases("add", [0.0, -847239]), expectedOutput );
 
 
-TestCases("add", [-297692, 35979]), expectedOutput );
+TestCases("add", [-847239, 723031]), expectedOutput );
 
 
-TestCases("add", [-297692, 0.0]), expectedOutput );
+TestCases("add", [-847239, 0.0]), expectedOutput );
 
 
-TestCases("add", [-297692, -297692]), expectedOutput );
+TestCases("add", [-847239, -847239]), expectedOutput );
 
 
 runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );

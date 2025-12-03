@@ -1,6 +1,6 @@
 # Evala static grading
 
-// NaN/20.0
+// 20.0/20.0
 If without else: 0
 
 // 15.0/20.0
@@ -25,4 +25,4 @@ Comment density:
   ratio: 30.8%
   verdict: Good
 
- # Total Grade: NaN/100.0
+ # Total Grade: 75.77/100.0

@@ -79,7 +79,13 @@ public final class GradeReport {
       //   ifCalc= ifTotal- ifWithoutElse;
       // }
       // TODO: fix 
-      double gradeIfs = 20.0 *  (ifTotal - ifWithoutElse) / ifTotal; // Math.max( 20.0 -ifCalc,0);
+      double gradeIfs =0;
+      if(ifTotal == 0){
+        gradeIfs = 20;
+      }else{
+       gradeIfs = 20.0 *  (ifTotal - ifWithoutElse) / ifTotal;
+      }
+       // Math.max( 20.0 -ifCalc,0);
       out.println("// "+gradeIfs+"/20.0");
       out.printf("If without else: %d%n%n", ifWithoutElse);
 
