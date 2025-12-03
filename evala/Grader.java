@@ -39,7 +39,14 @@ public final class Grader {
     // System.out.println("Number of locals: "+usage.writes.size());
     // System.out.println("Number of unused locals "+unusedLocals.size());
     //20.0 *  (ifTotal - ifWithoutElse) / ifTotal;
-     gradeLocals =20* (usage.writes.size() - unusedLocals.size())/usage.writes.size();//Math.min (20 -(usage.writes.size() - unusedLocals.size()), 20); // not sure if the min is needed 
+    if (usage.writes.size() == 0) {
+      // no locals: either give full credit or zero; I’m assuming full
+      gradeLocals = 20.0;
+    } else {
+      gradeLocals =20* (usage.writes.size() - unusedLocals.size())/usage.writes.size();//Math.min (20 -(usage.writes.size() - unusedLocals.size()), 20); // not sure if the min is needed 
+
+    }
+
     //System.out.println("local Grade: "+gradeLocals); 
     
 
@@ -57,8 +64,13 @@ public final class Grader {
     }
     // System.out.println("Number of fun params: "+ funParamCount);
     // System.out.println("Number of unsed "+unusedParams.size());
-
-    gradeParams = 20 * (funParamCount - unusedParams.size())/funParamCount; // Math.min(20 - (funParamCount- unusedParams.size()), 20); 
+    //int usedParamCount = funParamCount - unusedParams.size();
+    if (funParamCount == 0) {
+      gradeParams = 20.0;
+    } else {
+      gradeParams = 20 * (funParamCount - unusedParams.size())/funParamCount; // Math.min(20 - (funParamCount- unusedParams.size()), 20); 
+    }
+    //gradeParams = 20 * (funParamCount - unusedParams.size())/funParamCount; // Math.min(20 - (funParamCount- unusedParams.size()), 20); 
    // System.out.println("Param Grade: "+gradeParams); 
     
 
@@ -82,6 +94,9 @@ public final class Grader {
 
     var commentAnalysis = new GradeReport.CommentAnalysis(
       commentLines, comments.codeLines, comments.totalLines, ratio, verdict);
+    System.out.println("[DEBUG] gradeLocals = " + gradeLocals);
+    System.out.println("[DEBUG] gradeParams = " + gradeParams);
+    System.out.println("[DEBUG] ifTotal = " + ifTotal + ", ifWithoutElse = " + ifWithoutElse);
 
     return new GradeReport(ifWithoutElse, magic, unusedLocals, unusedParams, commentAnalysis,gradeLocals,gradeParams,ifTotal);
   }

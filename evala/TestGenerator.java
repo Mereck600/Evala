@@ -49,20 +49,6 @@ class BooleanVar implements TestVariation {
 }
 
 
-class StringVar implements TestVariation {
-
-    @Override
-    public List<Object> representatives() {
-        return Arrays.asList(
-            (Object) "",                     // empty
-            (Object) "a",                    // single char
-            (Object) "hello",                // simple word
-            (Object) "hello world",          // with space
-            (Object) "123",                  // numeric-looking
-            (Object) "spécial çhars ✓"       // unicode-ish
-        );
-    }
-}
 
 
 class TestCase {
@@ -96,18 +82,54 @@ class TestCase {
         }
     }
 
-    @Override
+     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        String exp = expected.toString();
-       
-        sb.append("var t").append(index).append(" = ");
 
-        sb.append("TestCase(").append("\"").append(functionName).append("\"");
-       // sb.append(", args=").append(args);
-        sb.append(", ").append(exp.substring(1,exp.length()-1 ));
-        
+        // We no longer declare a variable, just call TestCases(...)
+        sb.append("TestCases(");
+        sb.append(formatValue(functionName)); // first arg is the function name as string
+
+        // then all arguments
+        for (Object arg : args) {
+            sb.append(", ");
+            sb.append(formatValue(arg));
+        }
+
+        // and finally the expected value
+        sb.append(", ");
+        sb.append(formatValue(expected));
+
+        sb.append(")");
         return sb.toString();
+    }
+    
+
+    /**
+     * Render a Java Object as an Evala literal.
+     * 
+     */
+    private String formatValue(Object v) {
+        if (v == null) return "nil";
+
+        if (v instanceof String) {
+            // basic escaping
+            String s = (String) v;
+            s = s.replace("\\", "\\\\").replace("\"", "\\\"");
+            return "\"" + s + "\"";
+        }
+
+        if (v instanceof Boolean) {
+            return ((Boolean) v) ? "true" : "false";
+        }
+
+        // numbers (Double, Integer, etc.)
+        if (v instanceof Number) {
+            return v.toString();
+        }
+
+        // fallback: let toString() speak
+        return v.toString();
     }
 }
 

@@ -5,31 +5,31 @@
 // ========================================================
 
 
-var t1 = TestCase("bleh", 245878, 245878, nil, expectedOutput );
+TestCases("bleh", [503145, 503145, nil]), expectedOutput );
 
 
-var t2 = TestCase("bleh", 245878, 0.0, nil, expectedOutput );
+TestCases("bleh", [503145, 0.0, nil]), expectedOutput );
 
 
-var t3 = TestCase("bleh", 245878, -63043, nil, expectedOutput );
+TestCases("bleh", [503145, -189252, nil]), expectedOutput );
 
 
-var t4 = TestCase("bleh", 0.0, 245878, nil, expectedOutput );
+TestCases("bleh", [0.0, 503145, nil]), expectedOutput );
 
 
-var t5 = TestCase("bleh", 0.0, 0.0, nil, expectedOutput );
+TestCases("bleh", [0.0, 0.0, nil]), expectedOutput );
 
 
-var t6 = TestCase("bleh", 0.0, -63043, nil, expectedOutput );
+TestCases("bleh", [0.0, -189252, nil]), expectedOutput );
 
 
-var t7 = TestCase("bleh", -63043, 245878, nil, expectedOutput );
+TestCases("bleh", [-189252, 503145, nil]), expectedOutput );
 
 
-var t8 = TestCase("bleh", -63043, 0.0, nil, expectedOutput );
+TestCases("bleh", [-189252, 0.0, nil]), expectedOutput );
 
 
-var t9 = TestCase("bleh", -63043, -63043, nil, expectedOutput );
+TestCases("bleh", [-189252, -189252, nil]), expectedOutput );
 
 
 runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );
