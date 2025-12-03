@@ -5,31 +5,31 @@
 // ========================================================
 
 
-TestCases("sub", [456935, 456935, nil]), expectedOutput );
+TestCases("sub", 454416, 454416, nil, "expectedOutput");
 
 
-TestCases("sub", [456935, 0.0, nil]), expectedOutput );
+TestCases("sub", 454416, 0.0, nil, "expectedOutput");
 
 
-TestCases("sub", [456935, -46269, nil]), expectedOutput );
+TestCases("sub", 454416, -9748, nil, "expectedOutput");
 
 
-TestCases("sub", [0.0, 456935, nil]), expectedOutput );
+TestCases("sub", 0.0, 454416, nil, "expectedOutput");
 
 
-TestCases("sub", [0.0, 0.0, nil]), expectedOutput );
+TestCases("sub", 0.0, 0.0, nil, "expectedOutput");
 
 
-TestCases("sub", [0.0, -46269, nil]), expectedOutput );
+TestCases("sub", 0.0, -9748, nil, "expectedOutput");
 
 
-TestCases("sub", [-46269, 456935, nil]), expectedOutput );
+TestCases("sub", -9748, 454416, nil, "expectedOutput");
 
 
-TestCases("sub", [-46269, 0.0, nil]), expectedOutput );
+TestCases("sub", -9748, 0.0, nil, "expectedOutput");
 
 
-TestCases("sub", [-46269, -46269, nil]), expectedOutput );
+TestCases("sub", -9748, -9748, nil, "expectedOutput");
 
 
 runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );

@@ -5,31 +5,31 @@
 // ========================================================
 
 
-TestCases("bleh", [503145, 503145, nil]), expectedOutput );
+TestCases("bleh", 432447, 432447, nil, "expectedOutput");
 
 
-TestCases("bleh", [503145, 0.0, nil]), expectedOutput );
+TestCases("bleh", 432447, 0.0, nil, "expectedOutput");
 
 
-TestCases("bleh", [503145, -189252, nil]), expectedOutput );
+TestCases("bleh", 432447, -54889, nil, "expectedOutput");
 
 
-TestCases("bleh", [0.0, 503145, nil]), expectedOutput );
+TestCases("bleh", 0.0, 432447, nil, "expectedOutput");
 
 
-TestCases("bleh", [0.0, 0.0, nil]), expectedOutput );
+TestCases("bleh", 0.0, 0.0, nil, "expectedOutput");
 
 
-TestCases("bleh", [0.0, -189252, nil]), expectedOutput );
+TestCases("bleh", 0.0, -54889, nil, "expectedOutput");
 
 
-TestCases("bleh", [-189252, 503145, nil]), expectedOutput );
+TestCases("bleh", -54889, 432447, nil, "expectedOutput");
 
 
-TestCases("bleh", [-189252, 0.0, nil]), expectedOutput );
+TestCases("bleh", -54889, 0.0, nil, "expectedOutput");
 
 
-TestCases("bleh", [-189252, -189252, nil]), expectedOutput );
+TestCases("bleh", -54889, -54889, nil, "expectedOutput");
 
 
 runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );

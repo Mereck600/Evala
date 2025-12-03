@@ -112,9 +112,9 @@ public final class GradeReport {
       double commentGrade = Math.max(0, (20 - Math.abs(50 - (comments.ratio *100.0))));
       DecimalFormat df  = new DecimalFormat("#.##");
       String formatted = df.format(commentGrade);
-      System.out.println("[DEBUG report] gradeLocals = " + gradeLocals);
-      System.out.println("[DEBUG report] gradeParams = " + gradeParams);
-      System.out.println("[DEBUG report] ifTotal = " + ifTotal + ", ifWithoutElse = " + ifWithoutElse);
+      // System.out.println("[DEBUG report] gradeLocals = " + gradeLocals);
+      // System.out.println("[DEBUG report] gradeParams = " + gradeParams);
+      // System.out.println("[DEBUG report] ifTotal = " + ifTotal + ", ifWithoutElse = " + ifWithoutElse);
 
       out.println("// "+ formatted+"/20.0");
       out.println("Comment density:");
@@ -125,7 +125,7 @@ public final class GradeReport {
       out.printf("  verdict: %s%n", comments.verdict);
       double finalGrade = gradeIfs+gradeLocals+gradeParams+magicGrade+commentGrade;
       
-      System.out.print("fg: "+finalGrade);
+      //System.out.print("fg: "+finalGrade);
       String endGrade = df.format(finalGrade);
       out.println("\n # Total Grade: "+endGrade+"/100.0");
      

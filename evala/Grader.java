@@ -94,9 +94,9 @@ public final class Grader {
 
     var commentAnalysis = new GradeReport.CommentAnalysis(
       commentLines, comments.codeLines, comments.totalLines, ratio, verdict);
-    System.out.println("[DEBUG] gradeLocals = " + gradeLocals);
-    System.out.println("[DEBUG] gradeParams = " + gradeParams);
-    System.out.println("[DEBUG] ifTotal = " + ifTotal + ", ifWithoutElse = " + ifWithoutElse);
+    // System.out.println("[DEBUG] gradeLocals = " + gradeLocals);
+    // System.out.println("[DEBUG] gradeParams = " + gradeParams);
+    // System.out.println("[DEBUG] ifTotal = " + ifTotal + ", ifWithoutElse = " + ifWithoutElse);
 
     return new GradeReport(ifWithoutElse, magic, unusedLocals, unusedParams, commentAnalysis,gradeLocals,gradeParams,ifTotal);
   }

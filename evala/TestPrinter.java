@@ -29,7 +29,7 @@ public class TestPrinter {
             for (TestCase tc : generated) { //generate the test file here 
                 //have now: new TestCase(("add", 100.0, 100.0, nil)
                 //new TestCase(("add", 100.0, 100.0, nil) expectedOutput)
-                String res = tc.toString() +", expectedOutput );";
+                String res = tc.toString();//+", expectedOutput );";
                 out.println(res);
                 out.println("\n");
                 }

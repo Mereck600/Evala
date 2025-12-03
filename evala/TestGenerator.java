@@ -33,7 +33,7 @@ interface TestVariation {            // context
 
 class NoInfoVar implements TestVariation {
 
-    @Override public List<Object> representatives() { return Arrays.asList((Object) "nil"); }
+    @Override public List<Object> representatives() { return Arrays.asList((Object) null); }
 }
 
 class PosNegZeroVar implements TestVariation {
@@ -82,28 +82,24 @@ class TestCase {
         }
     }
 
-     @Override
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        // We no longer declare a variable, just call TestCases(...)
         sb.append("TestCases(");
-        sb.append(formatValue(functionName)); // first arg is the function name as string
-
-        // then all arguments
+        sb.append(formatValue(functionName));
         for (Object arg : args) {
             sb.append(", ");
             sb.append(formatValue(arg));
         }
-
-        // and finally the expected value
         sb.append(", ");
         sb.append(formatValue(expected));
 
-        sb.append(")");
+        sb.append(");"); 
         return sb.toString();
     }
-    
+
+
 
     /**
      * Render a Java Object as an Evala literal.
@@ -167,7 +163,11 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         // Cartesian product over domains
         List<List<Object>> combos = cartesianProduct(domain);
         List<TestCase> out = new ArrayList<>();
-        for (List<Object> c : combos) out.add(new TestCase(functionName,index++, c));
+        for (List<Object> c : combos) {
+            List<Object> argsPlusExpected = new ArrayList<>(c);
+            argsPlusExpected.add("expectedOutput");
+            out.add(new TestCase(functionName, index++, argsPlusExpected.toArray()));
+        }
         return out;
     }
 

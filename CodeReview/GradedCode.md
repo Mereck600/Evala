@@ -1,28 +1,32 @@
 # Evala static grading
 
-// 20.0/20.0
-If without else: 0
+// 0.0/20.0
+If without else: 1
 
-// 15.0/20.0
-Magic numbers: 5
-  2.0
-  3.0
-  5.0
-  5.0
-  10.0
+// 12.0/20.0
+Magic numbers: 8
+  100.0
+  100.0
+  343.0
+  452.0
+  795.0
+  343.0
+  452.0
+  109.0
 
 // 20.0/20.0
 Unused locals: 0
 
-// 20.0/20.0
-Unused parameters: 0
+// 13.0/20.0
+Unused parameters: 1
+  function bleh: debug
 
-// 0.77/20.0
+// 0/20.0
 Comment density:
   total lines: 13
-  code lines:  7
-  comment lines: 4
-  ratio: 30.8%
+  code lines:  10
+  comment lines: 0
+  ratio: 0.0%
   verdict: Good
 
- # Total Grade: 75.77/100.0
+ # Total Grade: 45/100.0
