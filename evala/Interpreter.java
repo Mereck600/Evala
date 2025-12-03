@@ -7,7 +7,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();      // a fixed reference to the outermost global environment
     private Environment environment = globals;          // changes as we enter and exit local scopes
     private class BreakException extends RuntimeException {}
-
+    //create list of test cases
     Interpreter() {
         globals.define("TestCase", new EvalaCallable() {
             @Override
@@ -43,7 +43,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 for (int i = 1; i < arguments.size() - 1; i++) {
                     args.add(arguments.get(i));
                 }
-
+                //Save the test case object and add it to the global test case
                 return new TestCase(fnName, args, expected);
             }
 
@@ -64,6 +64,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             @Override
             public String toString() { return "<native fn>"; }
         });
+        //change this to use the global test case variable
         globals.define("runTests", new EvalaCallable() {
             @Override
             public int arity() {

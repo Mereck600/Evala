@@ -48,6 +48,23 @@ class BooleanVar implements TestVariation {
     @Override public List<Object> representatives(){return Arrays.asList((Object)true,false);}
 }
 
+
+class StringVar implements TestVariation {
+
+    @Override
+    public List<Object> representatives() {
+        return Arrays.asList(
+            (Object) "",                     // empty
+            (Object) "a",                    // single char
+            (Object) "hello",                // simple word
+            (Object) "hello world",          // with space
+            (Object) "123",                  // numeric-looking
+            (Object) "spécial çhars ✓"       // unicode-ish
+        );
+    }
+}
+
+
 class TestCase {
     final String functionName;
     final List<Object> args;

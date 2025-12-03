@@ -5,31 +5,31 @@
 // ========================================================
 
 
-var t1 = TestCase("add", 628948, 628948, nil, nil, expectedOutput );
+var t1 = TestCase("add", 172874, 172874, nil, nil, expectedOutput );
 
 
-var t2 = TestCase("add", 628948, 0.0, nil, nil, expectedOutput );
+var t2 = TestCase("add", 172874, 0.0, nil, nil, expectedOutput );
 
 
-var t3 = TestCase("add", 628948, -958602, nil, nil, expectedOutput );
+var t3 = TestCase("add", 172874, -502942, nil, nil, expectedOutput );
 
 
-var t4 = TestCase("add", 0.0, 628948, nil, nil, expectedOutput );
+var t4 = TestCase("add", 0.0, 172874, nil, nil, expectedOutput );
 
 
 var t5 = TestCase("add", 0.0, 0.0, nil, nil, expectedOutput );
 
 
-var t6 = TestCase("add", 0.0, -958602, nil, nil, expectedOutput );
+var t6 = TestCase("add", 0.0, -502942, nil, nil, expectedOutput );
 
 
-var t7 = TestCase("add", -958602, 628948, nil, nil, expectedOutput );
+var t7 = TestCase("add", -502942, 172874, nil, nil, expectedOutput );
 
 
-var t8 = TestCase("add", -958602, 0.0, nil, nil, expectedOutput );
+var t8 = TestCase("add", -502942, 0.0, nil, nil, expectedOutput );
 
 
-var t9 = TestCase("add", -958602, -958602, nil, nil, expectedOutput );
+var t9 = TestCase("add", -502942, -502942, nil, nil, expectedOutput );
 
 
 runTests(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9 );
