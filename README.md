@@ -249,7 +249,7 @@ Comment density:
 
 
 ## Attributions:
-- Evala is based on the work done by Robert Nystrom and his book (https://craftinginterpreters.com/contents.html)[Crafting Interpreters]
+- Evala is based on the work done by Robert Nystrom and his book [Crafting Interpreters](https://craftinginterpreters.com/contents.html)
 - With special thanks to Dr. Nadeem Abdul Hamid for his guidance.
   
 
