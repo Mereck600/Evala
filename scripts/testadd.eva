@@ -1,0 +1,12 @@
+// your function(s) under test
+fun add(a, b) {
+  return a + b;
+}
+
+// auto-generated (or hand-written) testS registrations:
+TestCases("add", 1, 2, 3);
+TestCases("add", -1, 1, 0);
+TestCases("add", 5, 5, 10);
+
+// at the end of the file, run them:
+print runTests();   // or just runTests();

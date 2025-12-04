@@ -5,8 +5,9 @@ fun bleh(a, b, debug) {
   return a + b;
 }
 
-var t1 = TestCase("bleh",100.0, 0.0, nil, 100.0);
-var t2 = TestCase("bleh", 343.0, -452.0, nil, 795.0);
-var t3 = TestCase("bleh", 343.0, -452.0, nil, -109.0);
+TestCases("bleh",100.0, 0.0, nil, 100.0);
+TestCases("bleh", 343.0, -452.0, nil, 795.0);
+TestCases("bleh", 343.0, -452.0, nil, -109.0);
 
-runTests(t1, t2,t3);
+print runTests();
+  

@@ -33,7 +33,7 @@ interface TestVariation {            // context
 
 class NoInfoVar implements TestVariation {
 
-    @Override public List<Object> representatives() { return Arrays.asList((Object) "nil"); }
+    @Override public List<Object> representatives() { return Arrays.asList((Object) null); }
 }
 
 class PosNegZeroVar implements TestVariation {
@@ -47,6 +47,9 @@ class BooleanVar implements TestVariation {
     
     @Override public List<Object> representatives(){return Arrays.asList((Object)true,false);}
 }
+
+
+
 
 class TestCase {
     final String functionName;
@@ -82,15 +85,47 @@ class TestCase {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        String exp = expected.toString();
-       
-        sb.append("var t").append(index).append(" = ");
 
-        sb.append("TestCase(").append("\"").append(functionName).append("\"");
-       // sb.append(", args=").append(args);
-        sb.append(", ").append(exp.substring(1,exp.length()-1 ));
-        
+        sb.append("TestCases(");
+        sb.append(formatValue(functionName));
+        for (Object arg : args) {
+            sb.append(", ");
+            sb.append(formatValue(arg));
+        }
+        sb.append(", ");
+        sb.append(formatValue(expected));
+
+        sb.append(");"); 
         return sb.toString();
+    }
+
+
+
+    /**
+     * Render a Java Object as an Evala literal.
+     * 
+     */
+    private String formatValue(Object v) {
+        if (v == null) return "nil";
+
+        if (v instanceof String) {
+            // basic escaping
+            String s = (String) v;
+            s = s.replace("\\", "\\\\").replace("\"", "\\\"");
+            return "\"" + s + "\"";
+        }
+
+        if (v instanceof Boolean) {
+            return ((Boolean) v) ? "true" : "false";
+        }
+
+        // numbers (Double, Integer, etc.)
+        if (v instanceof Number) {
+            return v.toString();
+        }
+
+        // fallback: let toString() speak
+        return v.toString();
     }
 }
 
@@ -128,7 +163,11 @@ public class TestGenerator implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         // Cartesian product over domains
         List<List<Object>> combos = cartesianProduct(domain);
         List<TestCase> out = new ArrayList<>();
-        for (List<Object> c : combos) out.add(new TestCase(functionName,index++, c));
+        for (List<Object> c : combos) {
+            List<Object> argsPlusExpected = new ArrayList<>(c);
+            argsPlusExpected.add("expectedOutput");
+            out.add(new TestCase(functionName, index++, argsPlusExpected.toArray()));
+        }
         return out;
     }
 

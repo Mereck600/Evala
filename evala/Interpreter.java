@@ -7,49 +7,47 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();      // a fixed reference to the outermost global environment
     private Environment environment = globals;          // changes as we enter and exit local scopes
     private class BreakException extends RuntimeException {}
+    //create list of test cases
+    public final List<TestCase> collectedTests = new ArrayList<>();
 
     Interpreter() {
-        globals.define("TestCase", new EvalaCallable() {
-            @Override
-            public int arity() {
-                // variable arity: we want TestCase("fn", arg1, ..., expected)
-                // we'll handle the count manually in call()
-                return -1; // see note on arity handling below
+        globals.define("TestCases", new EvalaCallable() {
+        @Override
+        public int arity() {
+            // -1 => “any number of args” in your current convention
+            return -1;
+        }
+
+        @Override
+        public Object call(Interpreter interpreter, List<Object> arguments) {
+            if (arguments.size() < 2) {
+                throw new RuntimeError(null, "TestCases requires at least name and expected value.");
             }
 
-            @Override
-            public Object call(Interpreter interpreter, List<Object> arguments) {
-                if (arguments.size() < 2) {
-                    // Need at least function name + expected
-                    throw new RuntimeError(
-                        new Token(TokenType.IDENTIFIER, "TestCase", null, -1),
-                        "TestCase(fnName, arg1, ..., expected) requires at least 2 arguments.");
-                }
+            Object fnNameObj = arguments.get(0);
+            if (!(fnNameObj instanceof String)) {
+                throw new RuntimeError(null, "First argument to TestCases must be a string function name.");
+            }
+            String fnName = (String) fnNameObj;
 
-                Object fnNameObj = arguments.get(0);
-                if (!(fnNameObj instanceof String)) {
-                    throw new RuntimeError(
-                        new Token(TokenType.IDENTIFIER, "TestCase", null, -1),
-                        "First argument to TestCase must be a function name (string).");
-                }
+            Object expected = arguments.get(arguments.size() - 1);
 
-                String fnName = (String) fnNameObj;
-
-                // Last argument is expected value
-                Object expected = arguments.get(arguments.size() - 1);
-
-                // Everything between is a function argument
-                List<Object> args = new ArrayList<>();
-                for (int i = 1; i < arguments.size() - 1; i++) {
-                    args.add(arguments.get(i));
-                }
-
-                return new TestCase(fnName, args, expected);
+            List<Object> callArgs = new ArrayList<>();
+            if (arguments.size() > 2) {
+                callArgs.addAll(arguments.subList(1, arguments.size() - 1));
             }
 
-            @Override
-            public String toString() { return "<native TestCase>"; }
-        });
+            TestCase tc = new TestCase(fnName, callArgs, expected);
+            interpreter.collectedTests.add(tc);
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return "<native fn TestCases>";
+        }
+    });
+
 
         globals.define("clock", new EvalaCallable() {
             @Override
@@ -64,11 +62,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             @Override
             public String toString() { return "<native fn>"; }
         });
+       
         globals.define("runTests", new EvalaCallable() {
             @Override
             public int arity() {
-                // allow any number of TestCase arguments
-                return -1; 
+                // runTests() takes no arguments in Evala
+                //return 0; 
+                return 0;
             }
 
             @Override
@@ -76,13 +76,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 int total = 0;
                 int passed = 0;
 
-                for (Object obj : arguments) {
-                    if (!(obj instanceof TestCase)) {
-                        System.out.println("[WARN] runTests: argument is not a TestCase: " + obj);
-                        continue;
-                    }
+                for (TestCase tc : interpreter.collectedTests) {
+                    if (tc == null) continue;
                     total++;
-                    TestCase tc = (TestCase) obj;
 
                     Object result = callFunctionByName(interpreter, tc.functionName, tc.args);
                     boolean ok = java.util.Objects.equals(result, tc.expected);
@@ -107,7 +103,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
             @Override
             public String toString() { return "<native runTests>"; }
-         });
+        });
+
 
         
 
